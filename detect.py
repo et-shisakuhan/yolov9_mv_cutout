@@ -51,6 +51,7 @@ def run(
         half=False,  # use FP16 half-precision inference
         dnn=False,  # use OpenCV DNN for ONNX inference
         vid_stride=1,  # video frame-rate stride
+        output_file_name="output.csv",
         csv_output_dir="./"
 ):
     source = str(source)
@@ -263,7 +264,7 @@ def run(
 
     # Print results
 
-    with open(f"{csv_output_dir}/face_recognition_{str(uuid.uuid4())[:4]}.csv", "w", newline="") as f:
+    with open(f"{csv_output_dir}/{output_file_name}", "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=['frame', 'name', 'conf', 'xb', 'xe', 'yb', 'ye'])
         writer.writeheader()
         for d in data:
@@ -315,6 +316,7 @@ def parse_opt():
     parser.add_argument('--half', action='store_true', help='use FP16 half-precision inference')
     parser.add_argument('--dnn', action='store_true', help='use OpenCV DNN for ONNX inference')
     parser.add_argument('--vid-stride', type=int, default=1, help='video frame-rate stride')
+    parser.add_argument('--output_file_name', type=str, default="output.wav", help='output file name')
     parser.add_argument('--csv_output_dir', type=str, default="./", help='output directory for csv files')
     opt = parser.parse_args()
     opt.imgsz *= 2 if len(opt.imgsz) == 1 else 1  # expand
