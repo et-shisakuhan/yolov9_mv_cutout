@@ -146,6 +146,7 @@ def run(
                 for *xyxy, conf, cls in det:
                     if names[int(cls)] == 'person':
                         person_dets.append([*xyxy, conf, cls, True])
+                        print(person_dets[-1])
                     else:
                         person_dets.append([*xyxy, conf, cls, True])
                         # print(f"Unrecognised object: {names[int(cls)]}")    
@@ -165,27 +166,28 @@ def run(
                     flag = max_conf_det[6]
                     
                     # Store in doubled_data
-                    obj = {
-                        "name": names[int(cls)],
-                        "conf": conf,
-                        "xyxy": xyxy,
-                        "x_begin": xyxy[0].item(),
-                        "x_end": xyxy[2].item(),
-                        "y_begin": xyxy[1].item(),
-                        "y_end": xyxy[3].item(),
-                        "frame": frame
-                    }
+                    if names[int(cls)] == 'person':
+                        obj = {
+                            "name": names[int(cls)],
+                            "conf": conf,
+                            "xyxy": xyxy,
+                            "x_begin": xyxy[0].item(),
+                            "x_end": xyxy[2].item(),
+                            "y_begin": xyxy[1].item(),
+                            "y_end": xyxy[3].item(),
+                            "frame": frame
+                        }
 
-                    data.append({
-                        'frame': obj['frame'],
-                        'conf': obj['conf'].item(),
-                        'x_begin': obj['x_begin'],
-                        'x_end': obj['x_end'],
-                        'y_begin': obj['y_begin'],
-                        'y_end': obj['y_end'],
-                        "name": obj['name']
-                    })
-                    print(obj)
+                        data.append({
+                            'frame': obj['frame'],
+                            'conf': obj['conf'].item(),
+                            'x_begin': obj['x_begin'],
+                            'x_end': obj['x_end'],
+                            'y_begin': obj['y_begin'],
+                            'y_end': obj['y_end'],
+                            "name": obj['name']
+                        })
+                        print(obj)
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
